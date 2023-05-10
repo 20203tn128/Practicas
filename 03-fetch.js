@@ -30,7 +30,7 @@ resp.then((response)=>{
         <input type="text" class="form-control" value="${element.email}">
         </div>
       
-         <a href="#" class="btn btn-primary">Ver detalles</a>
+         <a href="#" class="btn btn-primary" onclick="showModal(${element.id})" value="">Ver detalles</a>
         </div>
       </div> </div>`
       htmlX = htmlX + htmlcard
@@ -38,24 +38,37 @@ resp.then((response)=>{
     content.innerHTML=htmlX
 })
 
-const resp = fetch('https://reqres.in/api/users/2');
-resp.then((response)=>{
-    return response.json();
-}).then((json)=>{
-    let htmlX =``;
-    let content = document.getElementById('container');
-    let htmlmodal = `<div class="modal-body">
-    <div class="input-group mb-3">
-    <input type="text" class="form-control" value="${element.first_name}">
+function showModal(id){
+  console.log("Entro a la funci[on")
+  const myModal = new bootstrap.Modal('#showUser')
+  const resp = fetch(new URL(id,'https://reqres.in/api/users/'));
+  let htmlX =``;
+  let content1 = document.getElementById('Modalbody');
+  console.log(content1)
+  resp.then((response)=>{
+      return response.json();
+  }).then((json)=>{
+    console.log(json.data)
+      let htmlmodal = `
+    <div class="modal-body">
+    <div class="col-auto">
+    <img  src="${json.data.avatar}">
     </div>
-    <div class="input-group mb-3">
-    <input type="text" class="form-control" value="${element.last_name}">
-    </div>
-    <div class="input-group mb-3">
-    <input type="text" class="form-control" value="${element.email}">
-    </div>
-    </div> `
-  htmlX = htmlX + htmlmodal
-})
-content.innerHTML=htmlX
+      <div class="input-group mb-3">
+      <input type="text" class="form-control" value="${json.data.first_name}">
+      </div>
+      <div class="input-group mb-3">
+      <input type="text" class="form-control" value="${json.data.last_name}">
+      </div>
+      <div class="input-group mb-3">
+      <input type="text" class="form-control" value="${json.data.email}">
+      </div>
+      </div> `
+    htmlX = htmlX + htmlmodal
+    myModal.show();
+  })
+  content1.innerHTML=htmlX
+}
+
+
 //console.log(resp);
